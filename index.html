@@ -36,10 +36,17 @@
     <!-- Hero Section -->
     <section id="home" class="hero">
         <div class="hero-video">
-            <video autoplay muted loop>
+            <video autoplay muted loop playsinline webkit-playsinline preload="metadata">
                 <source src="assets/video/istockphoto-1360048537-640_adpp_is.mp4" type="video/mp4">
+                Seu navegador não suporta vídeos HTML5.
             </video>
             <div class="video-overlay"></div>
+            <div class="video-fallback">
+                <div class="fallback-content">
+                    <i class="fas fa-play-circle"></i>
+                    <p>Toque para reproduzir o vídeo</p>
+                </div>
+            </div>
         </div>
         <div class="hero-content">
             <div class="hero-text">

@@ -130,12 +130,16 @@ body {
     width: 100%;
     height: 100%;
     z-index: -2;
+    overflow: hidden;
 }
 
 .hero-video video {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    position: absolute;
+    top: 0;
+    left: 0;
 }
 
 .video-overlay {
@@ -146,6 +150,62 @@ body {
     height: 100%;
     background: linear-gradient(135deg, rgba(10, 31, 68, 0.8), rgba(30, 144, 255, 0.3));
     z-index: -1;
+}
+
+.video-fallback {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #0A1F44, #1a2a5a);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1;
+    transition: opacity 0.5s ease;
+}
+
+.video-fallback.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.fallback-content {
+    text-align: center;
+    color: white;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.fallback-content:hover {
+    transform: scale(1.05);
+}
+
+.fallback-content i {
+    font-size: 4rem;
+    color: #1E90FF;
+    margin-bottom: 1rem;
+    display: block;
+    animation: pulse 2s infinite;
+}
+
+.fallback-content p {
+    font-size: 1.2rem;
+    margin: 0;
+    opacity: 0.9;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+    100% {
+        transform: scale(1);
+    }
 }
 
 .hero-content {
@@ -924,6 +984,34 @@ section {
 /* Smooth Scrolling */
 html {
     scroll-behavior: smooth;
+}
+
+/* iOS specific styles */
+@supports (-webkit-touch-callout: none) {
+    .hero-video video {
+        -webkit-playsinline: true;
+        -webkit-media-controls: none;
+    }
+    
+    .video-fallback {
+        display: flex !important;
+    }
+    
+    .hero-video video::-webkit-media-controls {
+        display: none !important;
+    }
+    
+    .hero-video video::-webkit-media-controls-panel {
+        display: none !important;
+    }
+    
+    .hero-video video::-webkit-media-controls-play-button {
+        display: none !important;
+    }
+    
+    .hero-video video::-webkit-media-controls-start-playback-button {
+        display: none !important;
+    }
 }
 
 /* Loading Animation */

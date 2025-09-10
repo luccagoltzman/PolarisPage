@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initParallax();
     initFormHandling();
     initProductInteractions();
+    initVideoHandling();
 });
 
 // Navigation functionality
@@ -891,3 +892,92 @@ function optimizePerformance() {
 
 // Initialize performance optimizations
 optimizePerformance();
+
+// Video handling for iOS compatibility
+function initVideoHandling() {
+    const video = document.querySelector('.hero-video video');
+    const fallback = document.querySelector('.video-fallback');
+    
+    if (!video || !fallback) return;
+    
+    // Detect iOS
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+    
+    // Handle video events
+    video.addEventListener('loadstart', function() {
+        console.log('Video load started');
+    });
+    
+    video.addEventListener('canplay', function() {
+        console.log('Video can play');
+        if (isIOS) {
+            // On iOS, show fallback initially
+            fallback.style.display = 'flex';
+        }
+    });
+    
+    video.addEventListener('playing', function() {
+        console.log('Video is playing');
+        fallback.classList.add('hidden');
+    });
+    
+    video.addEventListener('pause', function() {
+        console.log('Video paused');
+        if (isIOS) {
+            fallback.classList.remove('hidden');
+        }
+    });
+    
+    video.addEventListener('error', function(e) {
+        console.log('Video error:', e);
+        fallback.classList.remove('hidden');
+    });
+    
+    // Handle fallback click
+    fallback.addEventListener('click', function() {
+        video.play().then(() => {
+            console.log('Video started playing');
+            fallback.classList.add('hidden');
+        }).catch(error => {
+            console.log('Error playing video:', error);
+            // If video fails to play, keep fallback visible
+        });
+    });
+    
+    // Try to play video on page load (will work on Android and desktop)
+    if (!isIOS) {
+        video.play().catch(error => {
+            console.log('Autoplay failed:', error);
+            fallback.classList.remove('hidden');
+        });
+    }
+    
+    // Handle visibility change (when user switches tabs)
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            video.pause();
+        } else {
+            if (!isIOS) {
+                video.play().catch(error => {
+                    console.log('Resume play failed:', error);
+                });
+            }
+        }
+    });
+    
+    // Handle page scroll to pause video on mobile
+    let scrollTimeout;
+    window.addEventListener('scroll', function() {
+        if (window.innerWidth <= 768) {
+            video.pause();
+            clearTimeout(scrollTimeout);
+            scrollTimeout = setTimeout(() => {
+                if (!isIOS) {
+                    video.play().catch(error => {
+                        console.log('Resume play after scroll failed:', error);
+                    });
+                }
+            }, 1000);
+        }
+    });
+}
