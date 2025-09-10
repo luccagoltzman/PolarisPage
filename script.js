@@ -255,6 +255,7 @@ function initProductInteractions() {
             
             const productCard = this.closest('.product-card');
             const productName = productCard.querySelector('h3').textContent;
+            const productPrice = productCard.querySelector('.price').textContent;
             
             // Add click animation
             this.style.transform = 'scale(0.95)';
@@ -263,7 +264,7 @@ function initProductInteractions() {
             }, 150);
             
             // Show purchase modal or redirect
-            showPurchaseModal(productName);
+            showPurchaseModal(productName, productPrice);
         });
     });
 }
@@ -330,7 +331,7 @@ function showNotification(message, type = 'info') {
     }, 5000);
 }
 
-function showPurchaseModal(productName) {
+function showPurchaseModal(productName, productPrice) {
     // Create modal
     const modal = document.createElement('div');
     modal.className = 'purchase-modal';
@@ -338,25 +339,93 @@ function showPurchaseModal(productName) {
         <div class="modal-overlay">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h3>Comprar ${productName}</h3>
-                    <button class="modal-close">&times;</button>
+                    <div class="modal-icon">
+                        <i class="fas fa-shopping-cart"></i>
+                    </div>
+                    <div class="modal-title">
+                        <h3>Comprar ${productName}</h3>
+                        <p>Finalize sua compra de forma rápida e segura</p>
+                    </div>
+                    <button class="modal-close">
+                        <i class="fas fa-times"></i>
+                    </button>
                 </div>
                 <div class="modal-body">
-                    <p>Obrigado pelo seu interesse em ${productName}!</p>
-                    <p>Para finalizar sua compra, entre em contato conosco:</p>
-                    <div class="contact-options">
-                        <a href="mailto:contato@polarissoftware.com" class="contact-option">
-                            <i class="fas fa-envelope"></i>
-                            contato@polarissoftware.com
-                        </a>
-                        <a href="tel:+5511999999999" class="contact-option">
-                            <i class="fas fa-phone"></i>
-                            +55 (11) 99999-9999
-                        </a>
+                    <div class="product-summary">
+                        <div class="product-info">
+                            <h4>${productName}</h4>
+                            <p>Software profissional para impulsionar seu negócio</p>
+                        </div>
+                        <div class="product-price-modal">
+                            <span class="price">${productPrice}</span>
+                            <span class="period">/mês</span>
+                        </div>
+                    </div>
+                    
+                    <div class="purchase-options">
+                        <h5>Escolha como deseja prosseguir:</h5>
+                        <div class="option-cards">
+                            <div class="option-card">
+                                <div class="option-icon">
+                                    <i class="fab fa-whatsapp"></i>
+                                </div>
+                                <div class="option-content">
+                                    <h6>WhatsApp</h6>
+                                    <p>Fale diretamente conosco</p>
+                                </div>
+                                <a href="https://wa.me/558898020419?text=Olá! Gostaria de comprar o ${productName}" class="option-btn" target="_blank">
+                                    <i class="fas fa-arrow-right"></i>
+                                </a>
+                            </div>
+                            
+                            <div class="option-card">
+                                <div class="option-icon">
+                                    <i class="fas fa-phone"></i>
+                                </div>
+                                <div class="option-content">
+                                    <h6>Telefone</h6>
+                                    <p>Ligue agora mesmo</p>
+                                </div>
+                                <a href="tel:+558898020419" class="option-btn">
+                                    <i class="fas fa-arrow-right"></i>
+                                </a>
+                            </div>
+                            
+                            <div class="option-card">
+                                <div class="option-icon">
+                                    <i class="fas fa-envelope"></i>
+                                </div>
+                                <div class="option-content">
+                                    <h6>Email</h6>
+                                    <p>Envie sua solicitação</p>
+                                </div>
+                                <a href="mailto:contato@polarissoftware.com?subject=Interesse em comprar ${productName}" class="option-btn">
+                                    <i class="fas fa-arrow-right"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="modal-features">
+                        <h5>O que você recebe:</h5>
+                        <ul class="features-list">
+                            <li><i class="fas fa-check"></i> Acesso imediato ao software</li>
+                            <li><i class="fas fa-check"></i> Suporte técnico especializado</li>
+                            <li><i class="fas fa-check"></i> Atualizações gratuitas</li>
+                            <li><i class="fas fa-check"></i> Treinamento completo</li>
+                            <li><i class="fas fa-check"></i> Garantia de 30 dias</li>
+                        </ul>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn-secondary modal-close">Fechar</button>
+                    <button class="btn-secondary modal-close">
+                        <i class="fas fa-times"></i>
+                        Fechar
+                    </button>
+                    <button class="btn-primary" onclick="window.open('https://wa.me/558898020419?text=Olá! Gostaria de comprar o ${productName}', '_blank')">
+                        <i class="fab fa-whatsapp"></i>
+                        Comprar Agora
+                    </button>
                 </div>
             </div>
         </div>
@@ -373,105 +442,351 @@ function showPurchaseModal(productName) {
         display: flex;
         align-items: center;
         justify-content: center;
+        opacity: 0;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     `;
     
     const style = document.createElement('style');
     style.textContent = `
+        .purchase-modal {
+            font-family: 'Inter', sans-serif;
+        }
+        
         .modal-overlay {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(5px);
+            background: rgba(10, 31, 68, 0.95);
+            backdrop-filter: blur(20px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
         }
         
         .modal-content {
-            background: #0A1F44;
-            border-radius: 12px;
-            border: 1px solid #1E90FF;
-            max-width: 500px;
-            width: 90%;
-            max-height: 80vh;
+            background: linear-gradient(135deg, #0A1F44, #1a2a5a);
+            border-radius: 20px;
+            border: 1px solid rgba(30, 144, 255, 0.3);
+            max-width: 600px;
+            width: 100%;
+            max-height: 90vh;
             overflow-y: auto;
             position: relative;
             z-index: 1;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+            transform: scale(0.9) translateY(20px);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .modal-content.show {
+            transform: scale(1) translateY(0);
         }
         
         .modal-header {
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            padding: 1.5rem;
+            padding: 2rem;
             border-bottom: 1px solid rgba(30, 144, 255, 0.2);
+            background: linear-gradient(135deg, rgba(30, 144, 255, 0.1), transparent);
         }
         
-        .modal-header h3 {
-            color: #1E90FF;
-            margin: 0;
-        }
-        
-        .modal-close {
-            background: none;
-            border: none;
-            color: #fff;
-            font-size: 1.5rem;
-            cursor: pointer;
-            padding: 0;
-            width: 30px;
-            height: 30px;
+        .modal-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #1E90FF, #00BFFF);
+            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
+            margin-right: 1rem;
+            font-size: 1.5rem;
+            color: white;
+            box-shadow: 0 8px 25px rgba(30, 144, 255, 0.3);
+        }
+        
+        .modal-title h3 {
+            color: #1E90FF;
+            margin: 0 0 0.5rem 0;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+        
+        .modal-title p {
+            color: rgba(255, 255, 255, 0.8);
+            margin: 0;
+            font-size: 0.9rem;
+        }
+        
+        .modal-close {
+            background: rgba(30, 144, 255, 0.1);
+            border: 1px solid rgba(30, 144, 255, 0.3);
+            color: #1E90FF;
+            font-size: 1rem;
+            cursor: pointer;
+            padding: 0.75rem;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            margin-left: auto;
+        }
+        
+        .modal-close:hover {
+            background: rgba(30, 144, 255, 0.2);
+            transform: scale(1.1);
         }
         
         .modal-body {
-            padding: 1.5rem;
+            padding: 2rem;
         }
         
-        .modal-body p {
-            margin-bottom: 1rem;
-            opacity: 0.9;
-        }
-        
-        .contact-options {
+        .product-summary {
             display: flex;
-            flex-direction: column;
-            gap: 1rem;
-            margin-top: 1rem;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(30, 144, 255, 0.05);
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 1px solid rgba(30, 144, 255, 0.1);
+            margin-bottom: 2rem;
         }
         
-        .contact-option {
+        .product-info h4 {
+            color: #1E90FF;
+            margin: 0 0 0.5rem 0;
+            font-size: 1.2rem;
+        }
+        
+        .product-info p {
+            color: rgba(255, 255, 255, 0.8);
+            margin: 0;
+            font-size: 0.9rem;
+        }
+        
+        .product-price-modal {
+            text-align: right;
+        }
+        
+        .product-price-modal .price {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1E90FF;
+        }
+        
+        .product-price-modal .period {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+            margin-left: 0.5rem;
+        }
+        
+        .purchase-options h5 {
+            color: #1E90FF;
+            margin: 0 0 1rem 0;
+            font-size: 1.1rem;
+        }
+        
+        .option-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .option-card {
+            background: rgba(30, 144, 255, 0.05);
+            border: 1px solid rgba(30, 144, 255, 0.1);
+            border-radius: 12px;
+            padding: 1.5rem;
             display: flex;
             align-items: center;
-            gap: 0.5rem;
-            color: #1E90FF;
-            text-decoration: none;
-            padding: 0.75rem;
+            gap: 1rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .option-card:hover {
             background: rgba(30, 144, 255, 0.1);
-            border-radius: 8px;
+            border-color: #1E90FF;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(30, 144, 255, 0.2);
+        }
+        
+        .option-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #1E90FF, #00BFFF);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: white;
+        }
+        
+        .option-content {
+            flex: 1;
+        }
+        
+        .option-content h6 {
+            color: #1E90FF;
+            margin: 0 0 0.25rem 0;
+            font-size: 1rem;
+        }
+        
+        .option-content p {
+            color: rgba(255, 255, 255, 0.8);
+            margin: 0;
+            font-size: 0.8rem;
+        }
+        
+        .option-btn {
+            color: #1E90FF;
+            font-size: 1.2rem;
             transition: all 0.3s ease;
         }
         
-        .contact-option:hover {
-            background: rgba(30, 144, 255, 0.2);
+        .option-card:hover .option-btn {
             transform: translateX(5px);
         }
         
+        .modal-features h5 {
+            color: #1E90FF;
+            margin: 0 0 1rem 0;
+            font-size: 1.1rem;
+        }
+        
+        .features-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .features-list li {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.5rem 0;
+            color: rgba(255, 255, 255, 0.9);
+        }
+        
+        .features-list li i {
+            color: #1E90FF;
+            font-size: 0.9rem;
+        }
+        
         .modal-footer {
-            padding: 1.5rem;
+            padding: 2rem;
             border-top: 1px solid rgba(30, 144, 255, 0.2);
-            text-align: right;
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+        }
+        
+        .modal-footer .btn-secondary {
+            background: transparent;
+            border: 1px solid rgba(30, 144, 255, 0.3);
+            color: #1E90FF;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .modal-footer .btn-secondary:hover {
+            background: rgba(30, 144, 255, 0.1);
+            border-color: #1E90FF;
+        }
+        
+        .modal-footer .btn-primary {
+            background: linear-gradient(135deg, #1E90FF, #00BFFF);
+            border: none;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+        }
+        
+        .modal-footer .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(30, 144, 255, 0.3);
+        }
+        
+        @media (max-width: 768px) {
+            .modal-overlay {
+                padding: 1rem;
+            }
+            
+            .modal-content {
+                max-height: 95vh;
+            }
+            
+            .modal-header {
+                padding: 1.5rem;
+            }
+            
+            .modal-body {
+                padding: 1.5rem;
+            }
+            
+            .modal-footer {
+                padding: 1.5rem;
+                flex-direction: column;
+            }
+            
+            .option-cards {
+                grid-template-columns: 1fr;
+            }
+            
+            .product-summary {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
         }
     `;
     
     document.head.appendChild(style);
     document.body.appendChild(modal);
     
+    // Store original scroll position and body overflow
+    const originalScrollY = window.scrollY;
+    const originalOverflow = document.body.style.overflow;
+    const originalPosition = document.body.style.position;
+    const originalTop = document.body.style.top;
+    const originalWidth = document.body.style.width;
+    
+    // Prevent body scroll
+    document.body.style.overflow = 'hidden';
+    document.body.style.position = 'fixed';
+    document.body.style.top = `-${originalScrollY}px`;
+    document.body.style.width = '100%';
+    
     // Close modal functionality
     const closeModal = () => {
         modal.style.opacity = '0';
+        modal.querySelector('.modal-content').classList.remove('show');
+        
+        // Restore body scroll and position
+        document.body.style.overflow = originalOverflow;
+        document.body.style.position = originalPosition;
+        document.body.style.top = originalTop;
+        document.body.style.width = originalWidth;
+        window.scrollTo(0, originalScrollY);
+        
         setTimeout(() => {
             if (modal.parentNode) {
                 modal.remove();
@@ -484,13 +799,27 @@ function showPurchaseModal(productName) {
         btn.addEventListener('click', closeModal);
     });
     
-    modal.querySelector('.modal-overlay').addEventListener('click', closeModal);
+    modal.querySelector('.modal-overlay').addEventListener('click', (e) => {
+        if (e.target === modal.querySelector('.modal-overlay')) {
+            closeModal();
+        }
+    });
     
     // Animate in
-    modal.style.opacity = '0';
     setTimeout(() => {
         modal.style.opacity = '1';
+        modal.querySelector('.modal-content').classList.add('show');
     }, 100);
+    
+    // Handle escape key
+    const handleEscape = (e) => {
+        if (e.key === 'Escape') {
+            closeModal();
+            document.removeEventListener('keydown', handleEscape);
+        }
+    };
+    
+    document.addEventListener('keydown', handleEscape);
 }
 
 // Scroll to top functionality

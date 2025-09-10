@@ -52,10 +52,10 @@ PolarisPage/
 - Grid responsivo
 
 ### 4. **Produtos**
-- Painel de preços para softwares
-- Cards de produtos com imagens
-- Sistema de compra integrado
-- Modal de compra
+- **VitraOne**: Plataforma para catálogos digitais de vendas (R$ 99,99/mês)
+- **CleanSoft**: Sistema de gestão para estéticas automotivas (R$ 280/mês)
+- **CarManager**: Sistema completo para gerenciamento de veículos (R$ 199/mês)
+- Modal de compra moderno e interativo
 
 ### 5. **Contato**
 - Formulário de contato funcional
