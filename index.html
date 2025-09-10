@@ -36,7 +36,16 @@
     <!-- Hero Section -->
     <section id="home" class="hero">
         <div class="hero-video">
-            <video autoplay muted loop playsinline webkit-playsinline preload="metadata">
+            <video 
+                autoplay 
+                muted 
+                loop 
+                playsinline 
+                webkit-playsinline 
+                preload="auto"
+                x-webkit-airplay="allow"
+                webkit-playsinline="true"
+                data-setup="{}">
                 <source src="assets/video/istockphoto-1360048537-640_adpp_is.mp4" type="video/mp4">
                 Seu navegador não suporta vídeos HTML5.
             </video>
@@ -58,8 +67,8 @@
                     Desenvolvemos soluções de software que transformam ideias em realidade digital
                 </p>
                 <div class="hero-buttons">
-                    <button class="btn-primary">Conhecer Produtos</button>
-                    <button class="btn-secondary">Falar Conosco</button>
+                    <a href="#products" class="btn-primary">Conhecer Produtos</a>
+                    <a href="#contact" class="btn-secondary">Falar Conosco</a>
                 </div>
             </div>
         </div>

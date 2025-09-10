@@ -255,6 +255,7 @@ body {
     transition: var(--transition);
     text-decoration: none;
     display: inline-block;
+    text-align: center;
 }
 
 .btn-primary {
@@ -266,6 +267,8 @@ body {
 .btn-primary:hover {
     transform: translateY(-2px);
     box-shadow: var(--shadow-heavy);
+    color: var(--white);
+    text-decoration: none;
 }
 
 .btn-secondary {
@@ -277,6 +280,17 @@ body {
 .btn-secondary:hover {
     background: var(--primary-blue);
     transform: translateY(-2px);
+    color: var(--white);
+    text-decoration: none;
+}
+
+/* Ensure buttons work as links */
+.hero-buttons a {
+    min-width: 180px;
+}
+
+.hero-buttons a:visited {
+    color: inherit;
 }
 
 .scroll-indicator {
@@ -991,6 +1005,7 @@ html {
     .hero-video video {
         -webkit-playsinline: true;
         -webkit-media-controls: none;
+        -webkit-playsinline: true;
     }
     
     .video-fallback {
@@ -1012,6 +1027,24 @@ html {
     .hero-video video::-webkit-media-controls-start-playback-button {
         display: none !important;
     }
+}
+
+/* Force video to play on mobile */
+@media (max-width: 768px) {
+    .hero-video video {
+        -webkit-playsinline: true;
+        playsinline: true;
+    }
+}
+
+/* Additional iOS fixes */
+.hero-video video {
+    -webkit-playsinline: true;
+    -webkit-media-controls: none;
+    -webkit-playsinline: true;
+    -webkit-media-controls-panel: none;
+    -webkit-media-controls-play-button: none;
+    -webkit-media-controls-start-playback-button: none;
 }
 
 /* Loading Animation */
