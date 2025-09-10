@@ -24,7 +24,8 @@ PolarisPage/
     │   ├── PolarisP.jpeg
     │   ├── Polaris_proposta3.png
     │   ├── PSoft.jpeg
-    │   └── PolarisEstrela.jpeg
+    │   ├── PolarisEstrela.jpeg
+    │   └── pexels-umkreisel-app-957061.jpg  # Imagem de fundo da seção contato
     └── video/          # Vídeos
         ├── istockphoto-1360048537-640_adpp_is.mp4  # Vídeo hero principal
         ├── istockphoto-1394876713-640_adpp_is.mp4  # Vídeo alternativo

@@ -620,7 +620,12 @@ section {
 
 /* Contact Section */
 .contact {
-    background: var(--primary-dark);
+    background: linear-gradient(rgba(10, 31, 68, 0.8), rgba(10, 31, 68, 0.8)), 
+                url('assets/images/pexels-umkreisel-app-957061.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    position: relative;
 }
 
 .contact-content {
@@ -628,6 +633,8 @@ section {
     grid-template-columns: 1fr 1fr;
     gap: 4rem;
     align-items: start;
+    position: relative;
+    z-index: 2;
 }
 
 .contact-info h2 {
@@ -669,10 +676,12 @@ section {
 }
 
 .contact-form {
-    background: rgba(30, 144, 255, 0.05);
+    background: rgba(10, 31, 68, 0.9);
+    backdrop-filter: blur(10px);
     padding: 2rem;
     border-radius: var(--border-radius);
-    border: 1px solid rgba(30, 144, 255, 0.1);
+    border: 1px solid rgba(30, 144, 255, 0.3);
+    box-shadow: var(--shadow-heavy);
 }
 
 .form-group {
