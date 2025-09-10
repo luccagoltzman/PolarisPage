@@ -152,7 +152,7 @@ function initAnimations() {
             }
         };
         
-        setTimeout(typeWriter, 1000);
+        setTimeout(typeWriter, 2000);
     }
 
     // Counter animation for stats
@@ -1123,3 +1123,5 @@ function initVideoHandling() {
     window.addEventListener('load', attemptPlay);
     document.addEventListener('readystatechange', attemptPlay);
 }
+
+
