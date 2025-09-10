@@ -928,60 +928,81 @@ function initVideoHandling() {
     video.setAttribute('muted', '');
     video.setAttribute('loop', '');
     video.setAttribute('autoplay', '');
+    video.setAttribute('preload', 'auto');
+    video.muted = true;
+    video.loop = true;
+    video.autoplay = true;
     
     // Hide fallback initially
     fallback.classList.add('hidden');
     
-    // Multiple attempts to play video
+    // Create a more aggressive play function
     let playAttempts = 0;
-    const maxAttempts = 5;
+    const maxAttempts = 10;
+    let isPlaying = false;
     
     function attemptPlay() {
+        if (isPlaying) return;
+        
         playAttempts++;
         console.log(`Attempting to play video (attempt ${playAttempts})`);
         
-        video.play().then(() => {
-            console.log('Video started playing successfully');
-            fallback.classList.add('hidden');
-        }).catch(error => {
-            console.log(`Play attempt ${playAttempts} failed:`, error);
-            
-            if (playAttempts < maxAttempts) {
-                // Try again after a short delay
-                setTimeout(attemptPlay, 500);
-            } else {
-                console.log('All play attempts failed, showing fallback');
-                fallback.classList.remove('hidden');
-            }
-        });
+        // Force video properties
+        video.muted = true;
+        video.loop = true;
+        video.autoplay = true;
+        
+        const playPromise = video.play();
+        
+        if (playPromise !== undefined) {
+            playPromise.then(() => {
+                console.log('Video started playing successfully');
+                isPlaying = true;
+                fallback.classList.add('hidden');
+            }).catch(error => {
+                console.log(`Play attempt ${playAttempts} failed:`, error);
+                
+                if (playAttempts < maxAttempts) {
+                    // Try again after a short delay
+                    setTimeout(attemptPlay, 200);
+                } else {
+                    console.log('All play attempts failed, showing fallback');
+                    fallback.classList.remove('hidden');
+                }
+            });
+        }
     }
     
     // Handle video events
     video.addEventListener('loadstart', function() {
         console.log('Video load started');
+        attemptPlay();
     });
     
     video.addEventListener('loadeddata', function() {
         console.log('Video data loaded');
-        // Try to play when data is loaded
         attemptPlay();
     });
     
     video.addEventListener('canplay', function() {
         console.log('Video can play');
-        // Try to play when video can play
-        if (playAttempts === 0) {
-            attemptPlay();
-        }
+        attemptPlay();
+    });
+    
+    video.addEventListener('canplaythrough', function() {
+        console.log('Video can play through');
+        attemptPlay();
     });
     
     video.addEventListener('playing', function() {
         console.log('Video is playing');
+        isPlaying = true;
         fallback.classList.add('hidden');
     });
     
     video.addEventListener('pause', function() {
         console.log('Video paused');
+        isPlaying = false;
         // Only show fallback on iOS if video was paused by user
         if (isIOS && !video.ended) {
             fallback.classList.remove('hidden');
@@ -997,6 +1018,7 @@ function initVideoHandling() {
     fallback.addEventListener('click', function() {
         video.play().then(() => {
             console.log('Video started playing from fallback');
+            isPlaying = true;
             fallback.classList.add('hidden');
         }).catch(error => {
             console.log('Error playing video from fallback:', error);
@@ -1006,62 +1028,98 @@ function initVideoHandling() {
     // Try to play video immediately
     attemptPlay();
     
+    // Create fake user interaction for iOS
+    if (isIOS) {
+        // Simulate user interaction
+        const fakeInteraction = () => {
+            const event = new Event('touchstart', { bubbles: true });
+            document.dispatchEvent(event);
+        };
+        
+        // Try fake interaction multiple times
+        setTimeout(fakeInteraction, 100);
+        setTimeout(fakeInteraction, 500);
+        setTimeout(fakeInteraction, 1000);
+        setTimeout(fakeInteraction, 2000);
+    }
+    
     // Force play on any user interaction
-    const userInteractionEvents = ['touchstart', 'touchend', 'click', 'keydown', 'mousedown', 'mouseup'];
+    const userInteractionEvents = ['touchstart', 'touchend', 'click', 'keydown', 'mousedown', 'mouseup', 'scroll'];
     userInteractionEvents.forEach(event => {
         document.addEventListener(event, function() {
-            if (video.paused) {
+            if (video.paused && !isPlaying) {
                 console.log('User interaction detected, attempting to play video');
                 attemptPlay();
             }
         }, { once: false });
     });
     
-    // Additional aggressive play attempts
-    setTimeout(() => {
-        if (video.paused) {
-            console.log('Delayed play attempt');
-            attemptPlay();
-        }
-    }, 1000);
-    
-    setTimeout(() => {
-        if (video.paused) {
-            console.log('Second delayed play attempt');
-            attemptPlay();
-        }
-    }, 3000);
+    // Very aggressive play attempts
+    const intervals = [100, 300, 500, 1000, 2000, 3000, 5000];
+    intervals.forEach((delay, index) => {
+        setTimeout(() => {
+            if (video.paused && !isPlaying) {
+                console.log(`Delayed play attempt ${index + 1} (${delay}ms)`);
+                attemptPlay();
+            }
+        }, delay);
+    });
     
     // Handle visibility change (when user switches tabs)
     document.addEventListener('visibilitychange', function() {
         if (document.hidden) {
             video.pause();
+            isPlaying = false;
         } else {
             // Try to resume playing when tab becomes visible
-            if (!video.ended) {
+            if (!video.ended && !isPlaying) {
                 attemptPlay();
             }
         }
     });
     
-    // Handle page scroll to pause video on mobile (optional)
-    let scrollTimeout;
-    if (isMobile) {
-        window.addEventListener('scroll', function() {
-            video.pause();
-            clearTimeout(scrollTimeout);
-            scrollTimeout = setTimeout(() => {
-                if (!video.ended) {
-                    attemptPlay();
-                }
-            }, 2000);
-        });
-    }
-    
     // Force play on window focus (helps with some mobile browsers)
     window.addEventListener('focus', function() {
-        if (!video.ended && video.paused) {
+        if (!video.ended && video.paused && !isPlaying) {
             attemptPlay();
         }
     });
+    
+    // Additional iOS specific handling
+    if (isIOS) {
+        // Try to play on orientation change
+        window.addEventListener('orientationchange', function() {
+            setTimeout(() => {
+                if (video.paused && !isPlaying) {
+                    attemptPlay();
+                }
+            }, 500);
+        });
+        
+        // Try to play on resize
+        window.addEventListener('resize', function() {
+            if (video.paused && !isPlaying) {
+                attemptPlay();
+            }
+        });
+        
+        // Programmatic click on video element
+        const programmaticClick = () => {
+            if (video.paused && !isPlaying) {
+                console.log('Programmatic click on video');
+                video.click();
+                attemptPlay();
+            }
+        };
+        
+        // Try programmatic clicks
+        setTimeout(programmaticClick, 200);
+        setTimeout(programmaticClick, 1000);
+        setTimeout(programmaticClick, 3000);
+    }
+    
+    // Final fallback - try to play on any DOM event
+    document.addEventListener('DOMContentLoaded', attemptPlay);
+    window.addEventListener('load', attemptPlay);
+    document.addEventListener('readystatechange', attemptPlay);
 }

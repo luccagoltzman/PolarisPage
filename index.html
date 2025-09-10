@@ -45,7 +45,11 @@
                 preload="auto"
                 x-webkit-airplay="allow"
                 webkit-playsinline="true"
-                data-setup="{}">
+                data-setup="{}"
+                style="width: 100%; height: 100%; object-fit: cover;"
+                onloadstart="this.play()"
+                oncanplay="this.play()"
+                onloadeddata="this.play()">
                 <source src="assets/video/istockphoto-1360048537-640_adpp_is.mp4" type="video/mp4">
                 Seu navegador não suporta vídeos HTML5.
             </video>
