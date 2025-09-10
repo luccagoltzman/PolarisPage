@@ -498,6 +498,7 @@ function showPurchaseModal(productName, productPrice) {
             box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
             transform: scale(0.9) translateY(20px);
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            margin: 1rem;
         }
         
         .modal-content.show {
@@ -507,36 +508,39 @@ function showPurchaseModal(productName, productPrice) {
         .modal-header {
             display: flex;
             align-items: center;
-            padding: 2rem;
+            padding: 1.5rem;
             border-bottom: 1px solid rgba(30, 144, 255, 0.2);
             background: linear-gradient(135deg, rgba(30, 144, 255, 0.1), transparent);
         }
         
         .modal-icon {
-            width: 60px;
-            height: 60px;
+            width: 50px;
+            height: 50px;
             background: linear-gradient(135deg, #1E90FF, #00BFFF);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             margin-right: 1rem;
-            font-size: 1.5rem;
+            font-size: 1.2rem;
             color: white;
             box-shadow: 0 8px 25px rgba(30, 144, 255, 0.3);
+            flex-shrink: 0;
         }
         
         .modal-title h3 {
             color: #1E90FF;
             margin: 0 0 0.5rem 0;
-            font-size: 1.5rem;
+            font-size: 1.3rem;
             font-weight: 700;
+            line-height: 1.2;
         }
         
         .modal-title p {
             color: rgba(255, 255, 255, 0.8);
             margin: 0;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
+            line-height: 1.3;
         }
         
         .modal-close {
@@ -562,7 +566,7 @@ function showPurchaseModal(productName, productPrice) {
         }
         
         .modal-body {
-            padding: 2rem;
+            padding: 1.5rem;
         }
         
         .product-summary {
@@ -570,22 +574,25 @@ function showPurchaseModal(productName, productPrice) {
             justify-content: space-between;
             align-items: center;
             background: rgba(30, 144, 255, 0.05);
-            padding: 1.5rem;
+            padding: 1.2rem;
             border-radius: 12px;
             border: 1px solid rgba(30, 144, 255, 0.1);
-            margin-bottom: 2rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            gap: 1rem;
         }
         
         .product-info h4 {
             color: #1E90FF;
             margin: 0 0 0.5rem 0;
-            font-size: 1.2rem;
+            font-size: 1.1rem;
         }
         
         .product-info p {
             color: rgba(255, 255, 255, 0.8);
             margin: 0;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
+            line-height: 1.3;
         }
         
         .product-price-modal {
@@ -593,14 +600,14 @@ function showPurchaseModal(productName, productPrice) {
         }
         
         .product-price-modal .price {
-            font-size: 2rem;
+            font-size: 1.8rem;
             font-weight: 700;
             color: #1E90FF;
         }
         
         .product-price-modal .period {
             color: rgba(255, 255, 255, 0.7);
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             margin-left: 0.5rem;
         }
         
@@ -612,21 +619,22 @@ function showPurchaseModal(productName, productPrice) {
         
         .option-cards {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1rem;
-            margin-bottom: 2rem;
+            grid-template-columns: 1fr;
+            gap: 0.8rem;
+            margin-bottom: 1.5rem;
         }
         
         .option-card {
             background: rgba(30, 144, 255, 0.05);
             border: 1px solid rgba(30, 144, 255, 0.1);
             border-radius: 12px;
-            padding: 1.5rem;
+            padding: 1.2rem;
             display: flex;
             align-items: center;
-            gap: 1rem;
+            gap: 0.8rem;
             transition: all 0.3s ease;
             cursor: pointer;
+            min-height: 60px;
         }
         
         .option-card:hover {
@@ -637,15 +645,16 @@ function showPurchaseModal(productName, productPrice) {
         }
         
         .option-icon {
-            width: 50px;
-            height: 50px;
+            width: 45px;
+            height: 45px;
             background: linear-gradient(135deg, #1E90FF, #00BFFF);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             color: white;
+            flex-shrink: 0;
         }
         
         .option-content {
@@ -655,13 +664,15 @@ function showPurchaseModal(productName, productPrice) {
         .option-content h6 {
             color: #1E90FF;
             margin: 0 0 0.25rem 0;
-            font-size: 1rem;
+            font-size: 0.95rem;
+            font-weight: 600;
         }
         
         .option-content p {
             color: rgba(255, 255, 255, 0.8);
             margin: 0;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
+            line-height: 1.2;
         }
         
         .option-btn {
@@ -700,24 +711,29 @@ function showPurchaseModal(productName, productPrice) {
         }
         
         .modal-footer {
-            padding: 2rem;
+            padding: 1.5rem;
             border-top: 1px solid rgba(30, 144, 255, 0.2);
             display: flex;
-            gap: 1rem;
+            gap: 0.8rem;
             justify-content: flex-end;
+            flex-wrap: wrap;
         }
         
         .modal-footer .btn-secondary {
             background: transparent;
             border: 1px solid rgba(30, 144, 255, 0.3);
             color: #1E90FF;
-            padding: 0.75rem 1.5rem;
+            padding: 0.7rem 1.2rem;
             border-radius: 8px;
             cursor: pointer;
             transition: all 0.3s ease;
             display: flex;
             align-items: center;
-            gap: 0.5rem;
+            gap: 0.4rem;
+            font-size: 0.9rem;
+            flex: 1;
+            justify-content: center;
+            min-width: 120px;
         }
         
         .modal-footer .btn-secondary:hover {
@@ -729,14 +745,18 @@ function showPurchaseModal(productName, productPrice) {
             background: linear-gradient(135deg, #1E90FF, #00BFFF);
             border: none;
             color: white;
-            padding: 0.75rem 1.5rem;
+            padding: 0.7rem 1.2rem;
             border-radius: 8px;
             cursor: pointer;
             transition: all 0.3s ease;
             display: flex;
             align-items: center;
-            gap: 0.5rem;
+            gap: 0.4rem;
             font-weight: 600;
+            font-size: 0.9rem;
+            flex: 1;
+            justify-content: center;
+            min-width: 120px;
         }
         
         .modal-footer .btn-primary:hover {
@@ -746,34 +766,146 @@ function showPurchaseModal(productName, productPrice) {
         
         @media (max-width: 768px) {
             .modal-overlay {
-                padding: 1rem;
+                padding: 0.5rem;
+                align-items: flex-start;
+                padding-top: 2rem;
             }
             
             .modal-content {
                 max-height: 95vh;
+                margin: 0;
+                border-radius: 16px;
+                width: calc(100% - 1rem);
             }
             
             .modal-header {
-                padding: 1.5rem;
+                padding: 1rem;
+                flex-wrap: wrap;
+                gap: 0.5rem;
+            }
+            
+            .modal-icon {
+                width: 40px;
+                height: 40px;
+                font-size: 1rem;
+                margin-right: 0.8rem;
+            }
+            
+            .modal-title h3 {
+                font-size: 1.1rem;
+            }
+            
+            .modal-title p {
+                font-size: 0.8rem;
+            }
+            
+            .modal-close {
+                width: 35px;
+                height: 35px;
+                font-size: 0.9rem;
             }
             
             .modal-body {
-                padding: 1.5rem;
-            }
-            
-            .modal-footer {
-                padding: 1.5rem;
-                flex-direction: column;
-            }
-            
-            .option-cards {
-                grid-template-columns: 1fr;
+                padding: 1rem;
             }
             
             .product-summary {
                 flex-direction: column;
-                gap: 1rem;
+                gap: 0.8rem;
                 text-align: center;
+                padding: 1rem;
+            }
+            
+            .product-info h4 {
+                font-size: 1rem;
+            }
+            
+            .product-info p {
+                font-size: 0.8rem;
+            }
+            
+            .product-price-modal .price {
+                font-size: 1.5rem;
+            }
+            
+            .purchase-options h5 {
+                font-size: 1rem;
+                margin-bottom: 0.8rem;
+            }
+            
+            .option-card {
+                padding: 1rem;
+                min-height: 55px;
+            }
+            
+            .option-icon {
+                width: 40px;
+                height: 40px;
+                font-size: 1rem;
+            }
+            
+            .option-content h6 {
+                font-size: 0.9rem;
+            }
+            
+            .option-content p {
+                font-size: 0.7rem;
+            }
+            
+            .modal-features h5 {
+                font-size: 1rem;
+                margin-bottom: 0.8rem;
+            }
+            
+            .features-list li {
+                font-size: 0.85rem;
+                padding: 0.4rem 0;
+            }
+            
+            .modal-footer {
+                padding: 1rem;
+                flex-direction: column;
+                gap: 0.6rem;
+            }
+            
+            .modal-footer .btn-secondary,
+            .modal-footer .btn-primary {
+                width: 100%;
+                padding: 0.8rem 1rem;
+                font-size: 0.9rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .modal-overlay {
+                padding: 0.25rem;
+                padding-top: 1rem;
+            }
+            
+            .modal-content {
+                width: calc(100% - 0.5rem);
+                border-radius: 12px;
+            }
+            
+            .modal-header {
+                padding: 0.8rem;
+            }
+            
+            .modal-body {
+                padding: 0.8rem;
+            }
+            
+            .product-summary {
+                padding: 0.8rem;
+            }
+            
+            .option-card {
+                padding: 0.8rem;
+                min-height: 50px;
+            }
+            
+            .modal-footer {
+                padding: 0.8rem;
             }
         }
     `;
