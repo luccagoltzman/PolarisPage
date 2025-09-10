@@ -341,6 +341,22 @@ section {
     position: relative;
 }
 
+.about-team-image {
+    width: 100%;
+    height: 400px;
+    object-fit: cover;
+    border-radius: var(--border-radius);
+    border: 2px solid rgba(30, 144, 255, 0.3);
+    transition: var(--transition);
+    box-shadow: var(--shadow-medium);
+}
+
+.about-team-image:hover {
+    border-color: var(--primary-blue);
+    transform: scale(1.02);
+    box-shadow: var(--shadow-heavy);
+}
+
 .image-placeholder {
     background: var(--gradient-dark);
     border-radius: var(--border-radius);
@@ -509,6 +525,17 @@ section {
     height: 100%;
     background: linear-gradient(45deg, rgba(30, 144, 255, 0.1), transparent);
     z-index: 1;
+}
+
+.product-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: var(--transition);
+}
+
+.product-img:hover {
+    transform: scale(1.05);
 }
 
 .product-image .image-placeholder {

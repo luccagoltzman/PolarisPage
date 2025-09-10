@@ -95,15 +95,41 @@ function initAnimations() {
     // Typing effect for hero title
     const heroTitle = document.querySelector('.hero-title');
     if (heroTitle) {
-        const text = heroTitle.innerHTML;
+        const originalHTML = heroTitle.innerHTML;
         heroTitle.innerHTML = '';
         
-        let i = 0;
+        // Parse the HTML to preserve span tags
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(originalHTML, 'text/html');
+        const textNodes = [];
+        
+        function extractTextNodes(node) {
+            if (node.nodeType === Node.TEXT_NODE) {
+                textNodes.push({ type: 'text', content: node.textContent });
+            } else if (node.nodeType === Node.ELEMENT_NODE) {
+                if (node.tagName === 'SPAN' && node.classList.contains('gradient-text')) {
+                    textNodes.push({ type: 'span', content: node.textContent });
+                } else {
+                    for (let child of node.childNodes) {
+                        extractTextNodes(child);
+                    }
+                }
+            }
+        }
+        
+        extractTextNodes(doc.body);
+        
+        let currentIndex = 0;
         const typeWriter = () => {
-            if (i < text.length) {
-                heroTitle.innerHTML += text.charAt(i);
-                i++;
-                setTimeout(typeWriter, 50);
+            if (currentIndex < textNodes.length) {
+                const node = textNodes[currentIndex];
+                if (node.type === 'text') {
+                    heroTitle.innerHTML += node.content;
+                } else if (node.type === 'span') {
+                    heroTitle.innerHTML += `<span class="gradient-text">${node.content}</span>`;
+                }
+                currentIndex++;
+                setTimeout(typeWriter, 100);
             }
         };
         
