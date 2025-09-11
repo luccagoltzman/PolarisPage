@@ -241,7 +241,6 @@ function initFormHandling() {
             e.preventDefault();
             
             // Get form data
-            const formData = new FormData(this);
             const name = this.querySelector('input[type="text"]').value;
             const email = this.querySelector('input[type="email"]').value;
             const message = this.querySelector('textarea').value;
@@ -257,8 +256,16 @@ function initFormHandling() {
                 return;
             }
             
-            // Simulate form submission
-            showNotification('Mensagem enviada com sucesso! Entraremos em contato em breve.', 'success');
+            // Format WhatsApp message
+            const whatsappMessage = `Olá! Me chamo ${name}.\nEmail: ${email}\n\nMensagem: ${message}`;
+            const encodedMessage = encodeURIComponent(whatsappMessage);
+            const whatsappUrl = `https://wa.me/558898020419?text=${encodedMessage}`;
+            
+            // Open WhatsApp in a new tab
+            window.open(whatsappUrl, '_blank');
+            
+            // Reset form and show success message
+            showNotification('Redirecionando para o WhatsApp...', 'success');
             this.reset();
         });
     }
