@@ -1220,6 +1220,26 @@ section {
     color: var(--primary-blue);
 }
 
+.social-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(135deg, #833AB4, #E1306C);
+    border-radius: 50%;
+    color: var(--white) !important;
+    opacity: 1 !important;
+    transition: var(--transition);
+    font-size: 1.2rem;
+}
+
+.social-link:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-medium);
+    color: var(--white) !important;
+}
+
 .footer-bottom {
     text-align: center;
     padding-top: 2rem;
