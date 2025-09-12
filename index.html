@@ -10,6 +10,40 @@
     <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Three.js e bibliotecas auxiliares -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+    <!-- GSAP para animações avançadas -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <!-- Anime.js para micro-animações -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <!-- D3.js para visualizações de dados -->
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <!-- TensorFlow.js para recursos de IA -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/face-landmarks-detection"></script>
+    <!-- Shaders personalizados -->
+    <script type="x-shader/x-vertex" id="vertexShader">
+        varying vec2 vUv;
+        void main() {
+            vUv = uv;
+            gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+        }
+    </script>
+    <script type="x-shader/x-fragment" id="fragmentShader">
+        uniform float time;
+        uniform vec3 color;
+        varying vec2 vUv;
+        
+        void main() {
+            vec2 position = vUv * 2.0 - 1.0;
+            float dist = length(position);
+            float ripple = sin(dist * 10.0 - time) * 0.5 + 0.5;
+            gl_FragColor = vec4(color * ripple, 1.0);
+        }
+    </script>
 </head>
 <body>
     <!-- Navigation -->
@@ -33,8 +67,18 @@
         </div>
     </nav>
 
+    <!-- Canvas 3D para efeitos de fundo -->
+    <canvas id="bgCanvas" class="background-canvas"></canvas>
+    
+    <!-- Container para rastreamento de movimento -->
+    <div id="motionTracker" class="motion-tracker">
+        <video id="motionVideo" playsinline style="display: none;"></video>
+        <canvas id="motionCanvas" class="motion-canvas"></canvas>
+    </div>
+
     <!-- Hero Section -->
     <section id="home" class="hero">
+        <div class="hero-particles"></div>
         <div class="hero-video">
             <video 
                 autoplay 
@@ -50,7 +94,7 @@
                 onloadstart="this.play()"
                 oncanplay="this.play()"
                 onloadeddata="this.play()">
-                <source src="assets/video/istockphoto-1314709125-640_adpp_is.mp4" type="video/mp4">
+                <source src="assets/video/215695_small.mp4" type="video/mp4">
                 Seu navegador não suporta vídeos HTML5.
             </video>
             <div class="video-overlay"></div>
@@ -82,11 +126,16 @@
     </section>
 
     <!-- About Section -->
-    <section id="about" class="about">
+    <section id="about" class="about scrollytelling-section">
+        <div class="parallax-container">
+            <div class="parallax-layer" data-speed="0.2"></div>
+            <div class="parallax-layer" data-speed="0.4"></div>
+            <div class="parallax-layer" data-speed="0.6"></div>
+        </div>
         <div class="container">
-            <div class="section-header">
-                <h2 class="section-title">Sobre a Polaris Software</h2>
-                <p class="section-subtitle">Transformando o futuro através da tecnologia</p>
+            <div class="section-header reveal-on-scroll">
+                <h2 class="section-title split-text">Sobre a Polaris Software</h2>
+                <p class="section-subtitle fade-up">Transformando o futuro através da tecnologia</p>
             </div>
             <div class="about-content">
                 <div class="about-text">
@@ -97,18 +146,31 @@
                         atendem às necessidades atuais, mas antecipam as demandas do futuro.
                     </p>
                     <div class="stats">
-                        <div class="stat-item">
-                            <h4>50+</h4>
-                            <p>Projetos Concluídos</p>
+                        <div class="stat-item" data-value="50" data-label="Projetos Concluídos">
+                            <div class="stat-visualization"></div>
+                            <div class="stat-info">
+                                <h4>50+</h4>
+                                <p>Projetos Concluídos</p>
+                            </div>
                         </div>
-                        <div class="stat-item">
-                            <h4>25+</h4>
-                            <p>Clientes Satisfeitos</p>
+                        <div class="stat-item" data-value="25" data-label="Clientes Satisfeitos">
+                            <div class="stat-visualization"></div>
+                            <div class="stat-info">
+                                <h4>25+</h4>
+                                <p>Clientes Satisfeitos</p>
+                            </div>
                         </div>
-                        <div class="stat-item">
-                            <h4>5+</h4>
-                            <p>Anos de Experiência</p>
+                        <div class="stat-item" data-value="5" data-label="Anos de Experiência">
+                            <div class="stat-visualization"></div>
+                            <div class="stat-info">
+                                <h4>5+</h4>
+                                <p>Anos de Experiência</p>
+                            </div>
                         </div>
+                    </div>
+                    <div class="stats-details">
+                        <div class="stats-chart"></div>
+                        <div class="stats-timeline"></div>
                     </div>
                 </div>
                 <div class="about-image">
@@ -326,5 +388,11 @@
     </footer>
 
     <script src="script.js"></script>
+    <script src="effects.js"></script>
+    <script src="voice.js"></script>
+    <script src="dataviz.js"></script>
+    <script src="accessibility.js"></script>
+    <script src="performance.js"></script>
+    <script src="modal.js"></script>
 </body>
 </html>

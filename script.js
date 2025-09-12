@@ -8,46 +8,290 @@ document.addEventListener('DOMContentLoaded', function() {
     initFormHandling();
     initProductInteractions();
     initVideoHandling();
+    initHeroEffects();
+    initParticles();
 });
+
+// Efeitos avançados para a seção hero
+function initHeroEffects() {
+    const heroText = document.querySelector('.hero-text');
+    if (!heroText) return;
+
+    // Efeito de luz que segue o mouse
+    heroText.addEventListener('mousemove', (e) => {
+        const rect = heroText.getBoundingClientRect();
+        const x = ((e.clientX - rect.left) / rect.width) * 100;
+        const y = ((e.clientY - rect.top) / rect.height) * 100;
+        
+        heroText.style.setProperty('--mouse-x', `${x}%`);
+        heroText.style.setProperty('--mouse-y', `${y}%`);
+    });
+
+    // Efeito de rotação 3D suave
+    heroText.addEventListener('mousemove', (e) => {
+        const rect = heroText.getBoundingClientRect();
+        const x = ((e.clientX - rect.left) / rect.width - 0.5) * 20;
+        const y = ((e.clientY - rect.top) / rect.height - 0.5) * 20;
+        
+        heroText.style.transform = `
+            perspective(1000px)
+            rotateX(${-y}deg)
+            rotateY(${x}deg)
+            scale3d(1.02, 1.02, 1.02)
+        `;
+    });
+
+    // Resetar transformação quando o mouse sair
+    heroText.addEventListener('mouseleave', () => {
+        heroText.style.transform = 'none';
+    });
+}
+
+// Sistema de partículas dinâmicas
+function initParticles() {
+    const heroSection = document.querySelector('.hero');
+    if (!heroSection) return;
+
+    // Criar container de partículas
+    const particlesContainer = document.createElement('div');
+    particlesContainer.className = 'hero-particles';
+    heroSection.appendChild(particlesContainer);
+
+    // Configurações das partículas
+    const particleCount = 50;
+    const particleColors = ['#1E90FF', '#00BFFF', '#833AB4'];
+
+    // Criar partículas
+    for (let i = 0; i < particleCount; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'hero-particle';
+        
+        // Posição e animação aleatória
+        const startX = Math.random() * 100;
+        const startY = Math.random() * 100;
+        const endX = startX + (Math.random() - 0.5) * 200;
+        const endY = startY + (Math.random() - 0.5) * 200;
+        const duration = 5 + Math.random() * 10;
+        const delay = Math.random() * -duration;
+        const size = 2 + Math.random() * 4;
+        const opacity = 0.1 + Math.random() * 0.3;
+        
+        particle.style.cssText = `
+            left: ${startX}%;
+            top: ${startY}%;
+            width: ${size}px;
+            height: ${size}px;
+            background: ${particleColors[Math.floor(Math.random() * particleColors.length)]};
+            animation-delay: ${delay}s;
+            --particle-duration: ${duration}s;
+            --particle-start-x: 0;
+            --particle-start-y: 0;
+            --particle-end-x: ${endX - startX}px;
+            --particle-end-y: ${endY - startY}px;
+            --particle-opacity: ${opacity};
+        `;
+        
+        particlesContainer.appendChild(particle);
+    }
+}
 
 // Navigation functionality
 function initNavigation() {
+    const navbar = document.querySelector('.navbar');
     const hamburger = document.querySelector('.hamburger');
     const navMenu = document.querySelector('.nav-menu');
     const navLinks = document.querySelectorAll('.nav-menu a');
 
-    // Mobile menu toggle
-    hamburger.addEventListener('click', function() {
-        hamburger.classList.toggle('active');
-        navMenu.classList.toggle('active');
+    // Criar barra de progresso
+    const progressBar = document.createElement('div');
+    progressBar.className = 'scroll-progress';
+    navbar.appendChild(progressBar);
+
+    // Atualizar barra de progresso no scroll
+    window.addEventListener('scroll', () => {
+        const scrollPercent = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
+        progressBar.style.setProperty('--scroll-width', `${scrollPercent}%`);
+        
+        // Ajustar opacidade da navegação baseado no scroll
+        const opacity = Math.min(0.98, 0.95 + (window.scrollY / 1000));
+        navbar.style.setProperty('--nav-opacity', opacity);
     });
 
-    // Close mobile menu when clicking on a link
+    // Efeito de luz na navegação
+    navbar.addEventListener('mousemove', (e) => {
+        const rect = navbar.getBoundingClientRect();
+        const x = ((e.clientX - rect.left) / rect.width) * 100;
+        const y = ((e.clientY - rect.top) / rect.height) * 100;
+        
+        navbar.style.setProperty('--mouse-x', `${x}%`);
+        navbar.style.setProperty('--mouse-y', `${y}%`);
+    });
+
+    // Efeitos nos links de navegação
     navLinks.forEach(link => {
-        link.addEventListener('click', function() {
-            hamburger.classList.remove('active');
-            navMenu.classList.remove('active');
+        // Criar elemento de highlight
+        const highlight = document.createElement('span');
+        highlight.className = 'nav-highlight';
+        link.appendChild(highlight);
+
+        // Efeito de hover
+        link.addEventListener('mouseenter', () => {
+            highlight.style.transform = 'scaleX(1)';
+            link.style.textShadow = '0 0 10px rgba(30, 144, 255, 0.5)';
         });
-    });
 
-    // Smooth scrolling for navigation links
-    navLinks.forEach(link => {
+        link.addEventListener('mouseleave', () => {
+            highlight.style.transform = 'scaleX(0)';
+            link.style.textShadow = 'none';
+        });
+
+        // Smooth scroll com efeito
         link.addEventListener('click', function(e) {
             e.preventDefault();
             const targetId = this.getAttribute('href');
             const targetSection = document.querySelector(targetId);
             
             if (targetSection) {
-                const offsetTop = targetSection.offsetTop - 80;
-                window.scrollTo({
-                    top: offsetTop,
-                    behavior: 'smooth'
-                });
+                // Animar highlight antes do scroll
+                highlight.style.transform = 'scaleX(1)';
+                
+                setTimeout(() => {
+                    const offsetTop = targetSection.offsetTop - 100;
+                    window.scrollTo({
+                        top: offsetTop,
+                        behavior: 'smooth'
+                    });
+                    
+                    // Reset highlight após scroll
+                    setTimeout(() => {
+                        highlight.style.transform = 'scaleX(0)';
+                    }, 300);
+                }, 200);
             }
+            
+            // Fechar menu mobile
+            hamburger.classList.remove('active');
+            navMenu.classList.remove('active');
         });
     });
-    
-    // Smooth scrolling for hero buttons
+
+    // Menu mobile premium
+    if (hamburger && navMenu) {
+        let isMenuOpen = false;
+        
+        const openMenu = () => {
+            hamburger.classList.add('active');
+            navMenu.classList.add('active');
+            document.body.style.overflow = 'hidden';
+            isMenuOpen = true;
+            
+            // Animate links with stagger effect
+            navLinks.forEach((link, index) => {
+                setTimeout(() => {
+                    link.style.transform = 'translateY(0)';
+                    link.style.opacity = '1';
+                }, index * 100);
+            });
+        };
+        
+        const closeMenu = () => {
+            hamburger.classList.remove('active');
+            navMenu.classList.remove('active');
+            document.body.style.overflow = '';
+            isMenuOpen = false;
+            
+            // Reset link animations
+            navLinks.forEach(link => {
+                link.style.transform = 'translateY(20px)';
+                link.style.opacity = '0';
+            });
+        };
+        
+        hamburger.addEventListener('click', function(e) {
+            e.stopPropagation();
+            if (isMenuOpen) {
+                closeMenu();
+            } else {
+                openMenu();
+            }
+        });
+        
+        // Close menu when clicking on a link
+        navLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                // Remove active class from all links
+                navLinks.forEach(l => l.classList.remove('active'));
+                // Add active class to clicked link
+                link.classList.add('active');
+                
+                closeMenu();
+                
+                // Smooth scroll to target
+                const targetId = link.getAttribute('href');
+                const targetSection = document.querySelector(targetId);
+                
+                if (targetSection) {
+                    setTimeout(() => {
+                        const offsetTop = targetSection.offsetTop - 100;
+                        window.scrollTo({
+                            top: offsetTop,
+                            behavior: 'smooth'
+                        });
+                    }, 300);
+                }
+            });
+        });
+        
+        // Update active link based on scroll position
+        const updateActiveLink = () => {
+            const sections = document.querySelectorAll('section[id]');
+            const scrollPos = window.scrollY + 150;
+            
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.offsetHeight;
+                const sectionId = section.getAttribute('id');
+                
+                if (scrollPos >= sectionTop && scrollPos < sectionTop + sectionHeight) {
+                    navLinks.forEach(link => {
+                        link.classList.remove('active');
+                        if (link.getAttribute('href') === `#${sectionId}`) {
+                            link.classList.add('active');
+                        }
+                    });
+                }
+            });
+        };
+        
+        // Update active link on scroll
+        window.addEventListener('scroll', updateActiveLink);
+        
+        // Close menu when clicking outside
+        navMenu.addEventListener('click', (e) => {
+            if (e.target === navMenu) {
+                closeMenu();
+            }
+        });
+        
+        // Close menu on escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && isMenuOpen) {
+                closeMenu();
+            }
+        });
+        
+        // Close menu on window resize
+        window.addEventListener('resize', () => {
+            if (window.innerWidth > 768 && isMenuOpen) {
+                closeMenu();
+            }
+        });
+    }
+
+    // Smooth scroll para botões do hero
     const heroButtons = document.querySelectorAll('.hero-buttons a');
     heroButtons.forEach(button => {
         button.addEventListener('click', function(e) {
@@ -56,23 +300,23 @@ function initNavigation() {
             const targetSection = document.querySelector(targetId);
             
             if (targetSection) {
-                const offsetTop = targetSection.offsetTop - 80;
-                window.scrollTo({
-                    top: offsetTop,
-                    behavior: 'smooth'
-                });
+                // Adicionar efeito de clique
+                button.style.transform = 'scale(0.95)';
+                
+                setTimeout(() => {
+                    const offsetTop = targetSection.offsetTop - 100;
+                    window.scrollTo({
+                        top: offsetTop,
+                        behavior: 'smooth'
+                    });
+                    
+                    // Reset transform
+                    setTimeout(() => {
+                        button.style.transform = '';
+                    }, 200);
+                }, 100);
             }
         });
-    });
-
-    // Navbar background on scroll
-    window.addEventListener('scroll', function() {
-        const navbar = document.querySelector('.navbar');
-        if (window.scrollY > 100) {
-            navbar.style.background = 'rgba(10, 31, 68, 0.98)';
-        } else {
-            navbar.style.background = 'rgba(10, 31, 68, 0.95)';
-        }
     });
 }
 
@@ -274,7 +518,49 @@ function initFormHandling() {
 // Product interactions
 function initProductInteractions() {
     const productButtons = document.querySelectorAll('.btn-product');
+    const cards = document.querySelectorAll('.service-card, .product-card');
     
+    // Efeito de luz e rotação 3D para cards
+    cards.forEach(card => {
+        card.addEventListener('mousemove', (e) => {
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            // Coordenadas normalizadas para o gradiente
+            const mouseX = x + 'px';
+            const mouseY = y + 'px';
+            
+            // Rotação 3D suave
+            const rotateX = (y - rect.height / 2) / 20;
+            const rotateY = -(x - rect.width / 2) / 20;
+            
+            card.style.setProperty('--mouse-x', mouseX);
+            card.style.setProperty('--mouse-y', mouseY);
+            card.style.setProperty('--rotate-x', `${rotateX}deg`);
+            card.style.setProperty('--rotate-y', `${rotateY}deg`);
+            
+            // Efeito de profundidade nos elementos internos
+            const elements = card.querySelectorAll('.service-icon, h3, p, .product-features, .product-price');
+            elements.forEach((el, index) => {
+                const z = (index + 1) * 10;
+                el.style.transform = `translateZ(${z}px)`;
+            });
+        });
+        
+        card.addEventListener('mouseleave', () => {
+            card.style.setProperty('--rotate-x', '0deg');
+            card.style.setProperty('--rotate-y', '0deg');
+            
+            // Resetar transformações dos elementos internos
+            const elements = card.querySelectorAll('.service-icon, h3, p, .product-features, .product-price');
+            elements.forEach(el => {
+                el.style.transform = 'translateZ(0)';
+            });
+        });
+    });
+    
+    // Interação dos botões de produto
     productButtons.forEach(button => {
         button.addEventListener('click', function(e) {
             e.preventDefault();
@@ -283,14 +569,27 @@ function initProductInteractions() {
             const productName = productCard.querySelector('h3').textContent;
             const productPrice = productCard.querySelector('.price').textContent;
             
-            // Add click animation
-            this.style.transform = 'scale(0.95)';
+            // Animação de clique avançada
+            button.style.transform = 'scale(0.95) translateY(2px)';
+            button.style.boxShadow = 'none';
+            
             setTimeout(() => {
-                this.style.transform = 'scale(1)';
+                button.style.transform = '';
+                button.style.boxShadow = '';
             }, 150);
             
-            // Show purchase modal or redirect
-            showPurchaseModal(productName, productPrice);
+            // Mostrar modal de compra
+            window.premiumModal.show(productName, productPrice);
+        });
+        
+        // Efeito de hover avançado
+        button.addEventListener('mousemove', (e) => {
+            const rect = button.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            button.style.setProperty('--mouse-x', x + 'px');
+            button.style.setProperty('--mouse-y', y + 'px');
         });
     });
 }
