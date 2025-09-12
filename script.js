@@ -386,51 +386,7 @@ function showPurchaseModal(productName, productPrice) {
                             <span class="price">${productPrice}</span>
                             <span class="period">/mês</span>
                         </div>
-                    </div>
-                    
-                    <div class="purchase-options">
-                        <h5>Escolha como deseja prosseguir:</h5>
-                        <div class="option-cards">
-                            <div class="option-card">
-                                <div class="option-icon">
-                                    <i class="fab fa-whatsapp"></i>
-                                </div>
-                                <div class="option-content">
-                                    <h6>WhatsApp</h6>
-                                    <p>Fale diretamente conosco</p>
-                                </div>
-                                <a href="https://wa.me/558898020419?text=Olá! Gostaria de comprar o ${productName}" class="option-btn" target="_blank">
-                                    <i class="fas fa-arrow-right"></i>
-                                </a>
-                            </div>
-                            
-                            <div class="option-card">
-                                <div class="option-icon">
-                                    <i class="fas fa-phone"></i>
-                                </div>
-                                <div class="option-content">
-                                    <h6>Telefone</h6>
-                                    <p>Ligue agora mesmo</p>
-                                </div>
-                                <a href="tel:+558898020419" class="option-btn">
-                                    <i class="fas fa-arrow-right"></i>
-                                </a>
-                            </div>
-                            
-                            <div class="option-card">
-                                <div class="option-icon">
-                                    <i class="fas fa-envelope"></i>
-                                </div>
-                                <div class="option-content">
-                                    <h6>Email</h6>
-                                    <p>Envie sua solicitação</p>
-                                </div>
-                                <a href="mailto:contato@polarissoftware.com?subject=Interesse em comprar ${productName}" class="option-btn">
-                                    <i class="fas fa-arrow-right"></i>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
+                    </div>       
                     
                     <div class="modal-features">
                         <h5>O que você recebe:</h5>
